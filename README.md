@@ -12,6 +12,6 @@ The user's guide section 8.13 describes what a Boosted Decision Tree is and how 
 
 ## Dscription of input variables
 
-##How to run
+## How to run
 
-##How to view output
+## How to view output
