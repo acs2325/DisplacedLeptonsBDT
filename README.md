@@ -1,92 +1,67 @@
 # Displaced Leptons BDT
 
+This Boosted Decision Tree (BDT) takes in SUSY selectron pair production MC as signal, and ATLAS data from 2022 as background. The goal is to use measured variables from the ATLAS tracker and calorimeter to distinguish signal reconstructed by ATLAS as electrons and photons from background electron and photons.
 
+## Suggested Reading
 
-## Getting started
+This BDT was made using TMVA, the [user's guide](https://root.cern.ch/download/doc/tmva/TMVAUsersGuide.pdf) is a good resource. In particular section 3: using TMVA describes the setup, with Table 2 giving a list of training configuration options.
 
-To make it easy for you to get started with GitLab, here's a list of recommended next steps.
+The user's guide section 8.13 describes what a Boosted Decision Tree is and how it works.
 
-Already a pro? Just edit this README.md and make it your own. Want to make it easy? [Use the template at the bottom](#editing-this-readme)!
+## Input files
 
-## Add your files
+The microntuples are stored on lxplus under  `/eos/user/a/ancsmith/DispLepNtuples/MicroNtuples`. 
 
-- [ ] [Create](https://docs.gitlab.com/ee/user/project/repository/web_editor.html#create-a-file) or [upload](https://docs.gitlab.com/ee/user/project/repository/web_editor.html#upload-a-file) files
-- [ ] [Add files using the command line](https://docs.gitlab.com/ee/gitlab-basics/add-file.html#add-a-file-using-the-command-line) or push an existing Git repository with the following command:
+In the `/signal/` directory you can find a grid of signal points with varying mass and lifetime parameters. For instance `200_0_10.root` contains events with selectron pair production, where each selectron has a mass of `200`  GeV and `10` ns mean lifetime.
+
+In the `data` directory is a subset of ATLAS proton-proton data taken in 2022, at CoM energy 13.6TeV.
+
+You can use `root` interactively to look inside the files:
 
 ```
-cd existing_repo
-git remote add origin https://gitlab.cern.ch/ancsmith/displaced-leptons-bdt.git
-git branch -M master
-git push -uf origin master
+root -l /eos/user/a/ancsmith/DispLepNtuples/MicroNtuples/signal/200_0_10.root 
+root [0] 
+Attaching file /eos/user/a/ancsmith/DispLepNtuples/MicroNtuples/signal/200_0_10.root as _file0...
+(TFile *) 0x3dd5d90
+root [1] .ls
+TFile**		/eos/user/a/ancsmith/DispLepNtuples/MicroNtuples/signal/200_0_10.root	
+ TFile*		/eos/user/a/ancsmith/DispLepNtuples/MicroNtuples/signal/200_0_10.root	
+  KEY: TTree	PostSel_1e;1	PostSel_1e
+  KEY: TTree	PostSel_1g;1	PostSel_1g
+  KEY: TTree	PostSel_ee;1	PostSel_ee
+  KEY: TTree	PostSel_eg;1	PostSel_eg
+  KEY: TTree	PostSel_gg;1	PostSel_gg
 ```
+There are 5 `TTrees` each corresponding to events in a given final state (ee = 2 electrons, eg = 1 electron,1 photon) after some trigger/kinematic selections, "PostSel".
 
-## Integrate with your tools
+## Description of input variables
 
-- [ ] [Set up project integrations](https://gitlab.cern.ch/ancsmith/displaced-leptons-bdt/-/settings/integrations)
+`el1_pt:` transverse momentum of electron track. Transverse = in plane orthogonal to direction of the proton-proton beams.
 
-## Collaborate with your team
+`el1_eta:` pseudorapidity coordinate of leading electron (see https://en.wikipedia.org/wiki/Pseudorapidity).
 
-- [ ] [Invite team members and collaborators](https://docs.gitlab.com/ee/user/project/members/)
-- [ ] [Create a new merge request](https://docs.gitlab.com/ee/user/project/merge_requests/creating_merge_requests.html)
-- [ ] [Automatically close issues from merge requests](https://docs.gitlab.com/ee/user/project/issues/managing_issues.html#closing-issues-automatically)
-- [ ] [Enable merge request approvals](https://docs.gitlab.com/ee/user/project/merge_requests/approvals/)
-- [ ] [Automatically merge when pipeline succeeds](https://docs.gitlab.com/ee/user/project/merge_requests/merge_when_pipeline_succeeds.html)
+`el1_maxEcell_E:` energy deposited in calorimeter cell that recieved the most energy from this electron.
 
-## Test and Deploy
+`el1_dpt:` percent difference between pt of electron track and electron object. See page 27 here (https://cds.cern.ch/record/2694014/files/ATL-COM-PHYS-2019-1321.pdf).
 
-Use the built-in continuous integration in GitLab.
+`el1_chi2:` goodness of fit parameter for electron track fom fit to the hits that form the track.
 
-- [ ] [Get started with GitLab CI/CD](https://docs.gitlab.com/ee/ci/quick_start/index.html)
-- [ ] [Analyze your code for known vulnerabilities with Static Application Security Testing(SAST)](https://docs.gitlab.com/ee/user/application_security/sast/)
-- [ ] [Deploy to Kubernetes, Amazon EC2, or Amazon ECS using Auto Deploy](https://docs.gitlab.com/ee/topics/autodevops/requirements.html)
-- [ ] [Use pull-based deployments for improved Kubernetes management](https://docs.gitlab.com/ee/user/clusters/agent/)
-- [ ] [Set up protected environments](https://docs.gitlab.com/ee/ci/environments/protected_environments.html)
+`el1_nPix:` number of pixel layers crossed by the electron track.
 
-***
+The index "1" in `el1_eta` refers to the "leading" electron. This is the electron with the most transverse momentum in each event. `el2_eta` refers to "subleading" electron, which has the second most `pt` in the event.
 
-# Editing this README
+Please, play around and add/remove input variables! You can see what is available, for instance in the two photon final state with `PostSel_gg->Print()` in interactive `root`. 
 
-When you're ready to make this README your own, just edit this file and use the handy template below (or feel free to structure it however you want - this is just a starting point!). Thank you to [makeareadme.com](https://www.makeareadme.com/) for this template.
+## How to run
 
-## Suggestions for a good README
-Every project is different, so consider which of these sections apply to yours. The sections used in the template are suggestions for most open source projects. Also keep in mind that while a README can be too long and detailed, too long is better than too short. If you think your README is too long, consider utilizing another form of documentation rather than cutting out information.
+`root -q -b -l myBDT.C`  will run the BDT and produce an `output.root` file.
 
-## Name
-Choose a self-explaining name for your project.
+In the text output you will also see a ranking of the variables input by importance, and a correlation matrix for these variables for signal and for background.
 
-## Description
-Let people know what your project can do specifically. Provide context and add a link to any reference visitors might be unfamiliar with. A list of Features or a Background subsection can also be added here. If there are alternatives to your project, this is a good place to list differentiating factors.
+You can edit `myBDT.C`, for instance with `vim myBDT.C` or any other text editor, to change the input variables/training hyperparameters such as depth etc (table 25 and 26 of the TMVA users guide for options).
 
-## Badges
-On some READMEs, you may see small images that convey metadata, such as whether or not all the tests are passing for the project. You can use Shields to add some to your README. Many services also have instructions for adding a badge.
+## How to view output
 
-## Visuals
-Depending on what you are making, it can be a good idea to include screenshots or even a video (you'll frequently see GIFs rather than actual videos). Tools like ttygif can help, but check out Asciinema for a more sophisticated method.
+`root -l -e ’TMVA::TMVAGui("$put/in/here/your/path/to/tmva/output/file.root")`
 
-## Installation
-Within a particular ecosystem, there may be a common way of installing things, such as using Yarn, NuGet, or Homebrew. However, consider the possibility that whoever is reading your README is a novice and would like more guidance. Listing specific steps helps remove ambiguity and gets people to using your project as quickly as possible. If it only runs in a specific context like a particular programming language version or operating system or has dependencies that have to be installed manually, also add a Requirements subsection.
-
-## Usage
-Use examples liberally, and show the expected output if you can. It's helpful to have inline the smallest example of usage that you can demonstrate, while providing links to more sophisticated examples if they are too long to reasonably include in the README.
-
-## Support
-Tell people where they can go to for help. It can be any combination of an issue tracker, a chat room, an email address, etc.
-
-## Roadmap
-If you have ideas for releases in the future, it is a good idea to list them in the README.
-
-## Contributing
-State if you are open to contributions and what your requirements are for accepting them.
-
-For people who want to make changes to your project, it's helpful to have some documentation on how to get started. Perhaps there is a script that they should run or some environment variables that they need to set. Make these steps explicit. These instructions could also be useful to your future self.
-
-You can also document commands to lint the code or run tests. These steps help to ensure high code quality and reduce the likelihood that the changes inadvertently break something. Having instructions for running tests is especially helpful if it requires external setup, such as starting a Selenium server for testing in a browser.
-
-## Authors and acknowledgment
-Show your appreciation to those who have contributed to the project.
-
-## License
-For open source projects, say how it is licensed.
-
-## Project status
-If you have run out of energy or time for your project, put a note at the top of the README saying that development has slowed down or stopped completely. Someone may choose to fork your project or volunteer to step in as a maintainer or owner, allowing your project to keep going. You can also make an explicit request for maintainers.
+This will bring up a GUI which is described in the user's guide. Here you can find ROC curves (https://en.wikipedia.org/wiki/Receiver_operating_characteristic), classifier score, plots of input variables, etc.
