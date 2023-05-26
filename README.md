@@ -58,7 +58,7 @@ Please, play around and add/remove input variables! You can see what is availabl
 
 In the text output you will also see a ranking of the variables input by importance, and a correlation matrix for these variables for signal and for background.
 
-You can edit `myBDT.C`, for instance with `vim myBDT.C` or any other text editor, to change the input variables/training hyperparameters such as depth etc (table 25 and 26 of the TMVA users guide for options).
+You can edit `myBDT.C`, for instance with `vim myBDT.C` or any other text editor, to change the input variables/training hyperparameters such as depth etc (table 25 and 26 of the TMVA users guide for options). There are comments within `myBDT.C` that indicate where/how to change configuration+inputs.
 
 ## How to view output
 
