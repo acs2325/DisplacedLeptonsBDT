@@ -48,6 +48,10 @@ There are 5 `TTrees` each corresponding to events in a given final state (ee = 2
 
 `el1_nPix:` number of pixel layers crossed by the electron track.
 
+The index "1" in `el1_eta` refers to the "leading" electron. This is the electron with the most transverse momentum in each event. `el2_eta` refers to "subleading" electron, which has the second most `pt` in the event.
+
+Please, play around and add/remove input variables! You can see what is available, for instance in the two photon final state with `PostSel_gg->Print()` in interactive `root`. 
+
 ## How to run
 
 `root -q -b -l myBDT.C`  will run the BDT and produce an `output.root` file.
