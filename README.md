@@ -71,6 +71,6 @@ You can edit `myBDT.C`, for instance with `vim myBDT.C` or any other text editor
 
 ## How to view output
 
-`root -l -e ’TMVA::TMVAGui("$put/in/here/your/path/to/tmva/output/file.root")`
+`root -l -e TMVA::TMVAGui("$put/in/here/your/path/to/tmva/output/file.root")`
 
 This will bring up a GUI which is described in the user's guide. Here you can find ROC curves (https://en.wikipedia.org/wiki/Receiver_operating_characteristic), classifier score, plots of input variables, etc.
