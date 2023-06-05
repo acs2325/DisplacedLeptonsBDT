@@ -10,7 +10,8 @@ The user's guide section 8.13 describes what a Boosted Decision Tree is and how 
 
 ## Input files
 
-The microntuples are stored on lxplus under  `/eos/user/a/ancsmith/DispLepNtuples/MicroNtuples`. 
+If you are working on xenia (the Nevis cluster) the microntuples are stored under `/data/acs2325/DispLepNtuples/MicroNtuples`.
+The microntuples are stored on lxplus (CERN cluster) under  `/eos/user/a/ancsmith/DispLepNtuples/MicroNtuples`. 
 
 In the `/signal/` directory you can find a grid of signal points with varying mass and lifetime parameters. For instance `200_0_10.root` contains events with selectron pair production, where each selectron has a mass of `200`  GeV and `10` ns mean lifetime.
 

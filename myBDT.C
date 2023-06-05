@@ -38,11 +38,11 @@ int myBDT(){
     //For example:
     //el1_t < 0 --> electron (el) with highest pt (1)  has time of flight (t) < 0 
     //you can use PostSel_1e->Print() in interactive root to see available variables
-    TCut BkgCuts = "el1_t < 0 && abs(el1_t) < 12.5"; 
+    TCut BkgCuts = "el1_t < 0 && abs(el1_t) < 12.5i && (el1_eta < 1.37 || el1_eta > 1.52)"; 
 
     //cuts applied to signal sample. Generally should be the same as those applied to data,
     // except the blinding cut which is reversed (t > 0)
-    TCut SigCuts = "el1_t > 0 && abs(el1_t) < 12.5";
+    TCut SigCuts = "el1_t > 0 && abs(el1_t) < 12.5 && (el1_eta < 1.37 || el1_eta > 1.52)";
 
     //size of training set and testing set (default of 0 will split datasets in half)
     NsigTrain = 0;
