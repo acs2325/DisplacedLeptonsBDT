@@ -58,7 +58,7 @@ Please, play around and add/remove input variables! You can see what is availabl
 First, you need to setup root. Run the following two commands:
 
 ```
-source /a/data/xenia/share/atlas/ATLASLocalRootBase/user/atlasLocalSetup.sh;
+setupATLAS
 lsetup "root 6.20.06-x86_64-centos7-gcc8-opt"
 ```
 After this, run the command:
