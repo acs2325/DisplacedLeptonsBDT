@@ -18,7 +18,8 @@
 
 
 //Directory where the signal/data imput files are stored
-string SAMPLES_DIR = "/eos/user/a/ancsmith/DispLepNtuples/MicroNtuples/";
+//string SAMPLES_DIR = "/eos/user/a/ancsmith/DispLepNtuples/MicroNtuples/";
+string SAMPLES_DIR = "/data/acs2325/DispLepNtuples/MicroNtuples/";
 
 //parameters for signal input: 200_0_1 --> 200(GeV) selectron with 1(ns) lifetime
 string GRID_POINT = "200_0_10";
@@ -38,7 +39,7 @@ int myBDT(){
     //For example:
     //el1_t < 0 --> electron (el) with highest pt (1)  has time of flight (t) < 0 
     //you can use PostSel_1e->Print() in interactive root to see available variables
-    TCut BkgCuts = "el1_t < 0 && abs(el1_t) < 12.5i && (el1_eta < 1.37 || el1_eta > 1.52)"; 
+    TCut BkgCuts = "el1_t < 0 && abs(el1_t) < 12.5 && (el1_eta < 1.37 || el1_eta > 1.52)"; 
 
     //cuts applied to signal sample. Generally should be the same as those applied to data,
     // except the blinding cut which is reversed (t > 0)
