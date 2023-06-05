@@ -55,6 +55,14 @@ Please, play around and add/remove input variables! You can see what is availabl
 
 ## How to run
 
+First, you need to setup root. Run the following two commands:
+
+```
+source /a/data/xenia/share/atlas/ATLASLocalRootBase/user/atlasLocalSetup.sh;
+lsetup "root 6.20.06-x86_64-centos7-gcc8-opt"
+```
+After this, run the command:
+
 `root -q -b -l myBDT.C`  will run the BDT and produce an `output.root` file.
 
 In the text output you will also see a ranking of the variables input by importance, and a correlation matrix for these variables for signal and for background.
